@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Swap Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    select {
+      padding: 5px;
+      font-size: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <label for="fromLanguage">From Language:</label>
+  <select id="fromLanguage">
+    <option value="en">English</option>
+    <option value="es">Spanish</option>
+    <!-- Add more language options as needed -->
+  </select>
+
+  <label for="toLanguage">To Language:</label>
+  <select id="toLanguage">
+    <option value="en">English</option>
+    <option value="es">Spanish</option>
+    <!-- Add more language options as needed -->
+  </select>
+
+  <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+
+  <button onclick="translate()">Translate</button>
+
+  <h3>Translated Text:</h3>
+  <div id="outputText"></div>
+
+  <script>
+    async function translate() {
+      const fromLanguage = document.getElementById('fromLanguage').value;
+      const toLanguage = document.getElementById('toLanguage').value;
+      const inputText = document.getElementById('inputText').value;
+
+      const response = await fetch(
+        `https://translation.googleapis.com/language/translate/v2?key=YOUR_GOOGLE_API_KEY`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            q: inputText,
+            source: fromLanguage,
+            target: toLanguage,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      const translatedText = data.data.translations[0].translatedText;
+
+      document.getElementById('outputText').innerText = translatedText;
+    }
+  </script>
+
+</body>
+</html>
